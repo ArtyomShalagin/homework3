@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.IBinder;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
 
@@ -35,6 +36,10 @@ public class ImageService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         try {
+            File f = new File(getFilesDir(), "image.png");
+            if (f.exists()) {
+                return;
+            }
             URL url = new URL(intent.getStringExtra(getPackageName() + ".image_url"));
             Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
             FileOutputStream fout = openFileOutput("image.png", Context.MODE_PRIVATE);
